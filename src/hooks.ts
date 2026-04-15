@@ -33,6 +33,9 @@ function onShortcuts(type: string) {
 		case "toggleContextPane":
 			WindowShortcuts.toggleContextPane();
 			break;
+		case "toggleSidebar":
+			WindowShortcuts.shortcutToggleSidebar();
+			break;
 		default:
 			break;
 	}

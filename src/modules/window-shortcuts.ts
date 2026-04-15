@@ -1,31 +1,20 @@
 export class WindowShortcuts {
 	static registerShortcuts() {
-		ztoolkit.Keyboard.register((ev, keyOptions) => {
-			ztoolkit.log(ev, keyOptions.keyboard);
-			if (keyOptions.keyboard?.equals("shift,l")) {
-				addon.hooks.onShortcuts("larger");
-			}
-			if (ev.shiftKey && ev.key === "S") {
-				addon.hooks.onShortcuts("smaller");
+		ztoolkit.Keyboard.register((_ev, keyOptions) => {
+			if (keyOptions.keyboard?.equals("shift,b")) {
+				addon.hooks.onShortcuts("toggleContextPane");
 			}
 		});
 	}
 
-	static exampleShortcutLargerCallback() {
-		new ztoolkit.ProgressWindow(addon.data.config.addonName)
-			.createLine({
-				text: "Larger!",
-				type: "default",
-			})
-			.show();
-	}
-
-	static exampleShortcutSmallerCallback() {
-		new ztoolkit.ProgressWindow(addon.data.config.addonName)
-			.createLine({
-				text: "Smaller!",
-				type: "default",
-			})
-			.show();
+	static toggleContextPane() {
+		const contextPane = Zotero.getMainWindow().ZoteroContextPane;
+		contextPane.togglePane();
+		if (contextPane.activeEditor) {
+			const editorInstance = contextPane.activeEditor.getCurrentInstance();
+			if (editorInstance) {
+				editorInstance.focus();
+			}
+		}
 	}
 }

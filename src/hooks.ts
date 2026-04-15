@@ -13,11 +13,11 @@ async function onStartup() {
 	addon.data.initialized = true;
 }
 
-async function onMainWindowLoad(win: _ZoteroTypes.MainWindow): Promise<void> {
+async function onMainWindowLoad(_win: _ZoteroTypes.MainWindow): Promise<void> {
 	addon.data.ztoolkit = createZToolkit();
 }
 
-async function onMainWindowUnload(win: Window): Promise<void> {
+async function onMainWindowUnload(_win: Window): Promise<void> {
 	ztoolkit.unregisterAll();
 }
 
@@ -30,8 +30,9 @@ function onShutdown(): void {
 
 function onShortcuts(type: string) {
 	switch (type) {
-		case "larger":
-			WindowShortcuts.exampleShortcutSmallerCallback();
+		case "toggleContextPane":
+			WindowShortcuts.toggleContextPane();
+			break;
 		default:
 			break;
 	}

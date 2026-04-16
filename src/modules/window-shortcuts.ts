@@ -2,14 +2,36 @@ export class WindowShortcuts {
 	static _lastKeydownTime = 0;
 
 	static registerShortcuts() {
+		const shortcuts = [
+				meta: true,
+				shift: true,
+				key: "'",
+				action: () => WindowShortcuts.shortcutToggleSidebar(),
+			},
+			{
+				meta: true,
+				shift: true,
+				key: "p",
+				action: () => WindowShortcuts.getCurrentSidebarPanel(),
+			},
+		];
+
 		ztoolkit.Keyboard.register((ev, keyOptions) => {
-			if (
-				keyOptions.type === "keydown" &&
-				ev.metaKey && ev.shiftKey && ev.key === "'" &&
-				ev.timeStamp !== WindowShortcuts._lastKeydownTime
-			) {
-				WindowShortcuts._lastKeydownTime = ev.timeStamp;
-				addon.hooks.onShortcuts("toggleSidebar");
+			if (keyOptions.type !== "keydown") return;
+
+			for (const shortcut of shortcuts) {
+				if (
+					!!shortcut.meta === ev.metaKey
+					&& !!shortcut.shift === ev.shiftKey
+					&& !!shortcut.ctrl === ev.ctrlKey
+					&& !!shortcut.alt === ev.altKey
+					&& shortcut.key === ev.key
+					&& ev.timeStamp !== WindowShortcuts._lastKeydownTime
+				) {
+					WindowShortcuts._lastKeydownTime = ev.timeStamp;
+					shortcut.action();
+					break;
+				}
 			}
 		});
 	}

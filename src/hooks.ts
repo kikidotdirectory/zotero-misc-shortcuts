@@ -28,23 +28,9 @@ function onShutdown(): void {
 	delete Zotero[addon.data.config.addonInstance];
 }
 
-function onShortcuts(type: string) {
-	switch (type) {
-		case "toggleContextPane":
-			WindowShortcuts.toggleContextPane();
-			break;
-		case "toggleSidebar":
-			WindowShortcuts.shortcutToggleSidebar();
-			break;
-		default:
-			break;
-	}
-}
-
 export default {
 	onStartup,
 	onShutdown,
 	onMainWindowLoad,
 	onMainWindowUnload,
-	onShortcuts,
 };

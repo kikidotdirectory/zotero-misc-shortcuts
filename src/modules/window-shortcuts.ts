@@ -61,7 +61,7 @@ export class WindowShortcuts {
 	}
 
 	static focusSidebar(panel: "annotations" | "thumbnails" | "outline") {
-		const sidebar = WindowShortcuts.getReaderContainer().getElementById("sidebarContainer")
+		const sidebar = WindowShortcuts.getReaderContainer().getElementById("sidebarContainer");
 		if (!sidebar) return;
 
 		const container = WindowShortcuts.getReaderContainer();
@@ -134,19 +134,4 @@ export class WindowShortcuts {
 			return;
 		}
 	}
-}
-
-// gets the PDF reader section
-function getReaderInternals() {
-	const Zotero_Tabs = ztoolkit.getGlobal("Zotero_Tabs");
-	const currentTab = Zotero.Reader.getByTabID(Zotero_Tabs.selectedID);
-	const innerWindow = currentTab._iframe?.contentWindow?.frames[0];
-
-	if (!innerWindow) return null;
-
-	return {
-		reader: innerWindow._reader,
-		doc: innerWindow.document,
-		pdfApp: innerWindow.PDFViewerApplication, // null for EPUB
-	};
 }

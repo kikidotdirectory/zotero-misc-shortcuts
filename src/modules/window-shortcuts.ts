@@ -61,6 +61,12 @@ export class WindowShortcuts {
 				let selectedThumbnail = WindowShortcuts.getReaderContainer().querySelector(".thumbnail.selected > .image");
 				selectedThumbnail.focus();
 				break;
+			case "annotations":
+				const firstAnnotation = WindowShortcuts.getReaderContainer().querySelector(".annotation");
+				if (!firstAnnotation) return null;
+				firstAnnotation.focus();
+
+				break;
 		}
 	}
 

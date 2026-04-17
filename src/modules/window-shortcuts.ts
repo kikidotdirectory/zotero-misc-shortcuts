@@ -36,14 +36,41 @@ export class WindowShortcuts {
 		});
 	}
 
-	static toggleContextPane() {
-		const contextPane = Zotero.getMainWindow().ZoteroContextPane;
-		contextPane.togglePane();
-		if (contextPane.activeEditor) {
-			const editorInstance = contextPane.activeEditor.getCurrentInstance();
-			if (editorInstance) {
-				editorInstance.focus();
+	// define helper functions
 
+	static currentZoteroTab() {
+		const Zotero_Tabs = ztoolkit.getGlobal("Zotero_Tabs");
+		const currentTab = Zotero.Reader.getByTabID(Zotero_Tabs.selectedID);
+		return currentTab;
+	}
+
+	static activeSidebarTab(): "annotations" | "thumbnails" | "outline" {
+		return WindowShortcuts.currentZoteroTab()._internalReader._state.sidebarView;
+	}
+
+	static getSidebarContainer() {
+		const innerWindow = WindowShortcuts.currentZoteroTab()._iframe?.contentWindow?.document;
+
+		ztoolkit.log(innerWindow);
+		if (!innerWindow) return null;
+		return innerWindow;
+	}
+
+	// behavior
+	static toggleContextPane() {
+		const win = ztoolkit.getGlobal("Zotero_Tabs");
+		ztoolkit.log(win);
+		// if (contextPane.activeEditor) {
+		// const editorInstance = contextPane.activeEditor.getCurrentInstance();
+		// ztoolkit.log(editorInstance);
+		// if (editorInstance) {
+		// 	editorInstance.focus();
+		// }
+		// }
+	}
+
+	// need to split this function into open and close sidebar functions so that they
+	// can be called in separate functions
 	static shortcutToggleSidebar() {
 		/**
 		 * Toggle Left Pane
@@ -67,11 +94,28 @@ export class WindowShortcuts {
 			}
 		} else {
 			const openStatus = Zotero.Reader._sidebarOpen;
-			Zotero.Reader.getByTabID(
-				Zotero_Tabs.selectedID,
-			)._internalReader.toggleSidebar(!openStatus);
+			WindowShortcuts.currentZoteroTab()._internalReader.toggleSidebar(!openStatus);
 			Zotero.Reader._sidebarOpen = !openStatus;
 			return;
 		}
 	}
+
+	static toggleFocus(panel: string) {
+	}
 }
+
+// gets the PDF reader section
+function getReaderInternals() {
+	const Zotero_Tabs = ztoolkit.getGlobal("Zotero_Tabs");
+	const currentTab = Zotero.Reader.getByTabID(Zotero_Tabs.selectedID);
+	const innerWindow = currentTab._iframe?.contentWindow?.frames[0];
+
+	if (!innerWindow) return null;
+
+	return {
+		reader: innerWindow._reader,
+		doc: innerWindow.document,
+		pdfApp: innerWindow.PDFViewerApplication, // null for EPUB
+	};
+}
+

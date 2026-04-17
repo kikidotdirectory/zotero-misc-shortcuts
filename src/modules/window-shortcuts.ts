@@ -1,37 +1,40 @@
+type Mod = "meta" | "shift" | "ctrl" | "alt";
+
+class Shortcut {
+	constructor(
+		readonly mods: Mod[],
+		readonly key: string,
+		readonly action?: () => void,
+	) {}
+
+	matches(ev: KeyboardEvent) {
+		return (
+			this.mods.includes("meta") === ev.metaKey
+			&& this.mods.includes("shift") === ev.shiftKey
+			&& this.mods.includes("ctrl") === ev.ctrlKey
+			&& this.mods.includes("alt") === ev.altKey
+			&& this.key === ev.key
+		);
+	}
+}
+
 export class WindowShortcuts {
 	// define keyboard shortcuts
 	static _lastKeydownTime = 0;
 
 	static registerShortcuts() {
 		const shortcuts = [
-			{
-				meta: true,
-				shift: true,
-				key: "'",
-				action: () => WindowShortcuts.shortcutToggleSidebar(),
-			},
-			{
-				meta: true,
-				shift: true,
-				key: "p",
-				action: () => WindowShortcuts.getCurrentSidebarPanel(),
-			},
+			new Shortcut(["meta", "shift"], "'", () => WindowShortcuts.shortcutToggleSidebar()),
+			new Shortcut(["meta", "shift"], "m", () => WindowShortcuts.focusSidebar("annotations")),
 		];
 
 		ztoolkit.Keyboard.register((ev, keyOptions) => {
 			if (keyOptions.type !== "keydown") return;
 
 			for (const shortcut of shortcuts) {
-				if (
-					!!shortcut.meta === ev.metaKey
-					&& !!shortcut.shift === ev.shiftKey
-					&& !!shortcut.ctrl === ev.ctrlKey
-					&& !!shortcut.alt === ev.altKey
-					&& shortcut.key === ev.key
-					&& ev.timeStamp !== WindowShortcuts._lastKeydownTime
-				) {
+				if (shortcut.matches(ev) && ev.timeStamp !== WindowShortcuts._lastKeydownTime) {
 					WindowShortcuts._lastKeydownTime = ev.timeStamp;
-					shortcut.action();
+					shortcut.action?.();
 					break;
 				}
 			}

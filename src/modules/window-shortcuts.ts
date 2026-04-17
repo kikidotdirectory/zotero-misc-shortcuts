@@ -51,9 +51,17 @@ export class WindowShortcuts {
 	static getReaderContainer() {
 		const innerWindow = WindowShortcuts.currentZoteroTab()._iframe?.contentWindow?.document;
 
-		ztoolkit.log(innerWindow);
 		if (!innerWindow) return null;
 		return innerWindow;
+	}
+
+	static focusSidebar(panel: "annotations" | "thumbnails" | "outline") {
+		switch (panel) {
+			case "thumbnails":
+				let selectedThumbnail = WindowShortcuts.getReaderContainer().querySelector(".thumbnail.selected > .image");
+				selectedThumbnail.focus();
+				break;
+		}
 	}
 
 	// behavior
@@ -96,11 +104,9 @@ export class WindowShortcuts {
 			const openStatus = Zotero.Reader._sidebarOpen;
 			WindowShortcuts.currentZoteroTab()._internalReader.toggleSidebar(!openStatus);
 			Zotero.Reader._sidebarOpen = !openStatus;
+			WindowShortcuts.focusSidebar(WindowShortcuts.activeSidebarTab());
 			return;
 		}
-	}
-
-	static toggleFocus(panel: string) {
 	}
 }
 

@@ -56,16 +56,22 @@ export class WindowShortcuts {
 	}
 
 	static focusSidebar(panel: "annotations" | "thumbnails" | "outline") {
+		const sidebar = WindowShortcuts.getReaderContainer().getElementById("sidebarContainer")
+		if (!sidebar) return;
+
+		const container = WindowShortcuts.getReaderContainer();
 		switch (panel) {
-			case "thumbnails":
-				let selectedThumbnail = WindowShortcuts.getReaderContainer().querySelector(".thumbnail.selected > .image");
-				selectedThumbnail.focus();
+			case "thumbnails": {
+				const selectedThumbnail = container.querySelector(".thumbnail.selected > .image") as HTMLElement;
+				selectedThumbnail?.focus();
 				break;
-			case "annotations":
-				const firstAnnotation = WindowShortcuts.getReaderContainer().querySelector(".annotation");
-				if (!firstAnnotation) return null;
+			}
+			case "annotations": {
+				const firstAnnotation = container.querySelector(".annotation") as HTMLElement;
+				if (!firstAnnotation) return;
 				firstAnnotation.focus();
 				break;
+			}
 			case "outline":
 				// todo i've never needed to use this
 				break;

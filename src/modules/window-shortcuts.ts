@@ -1,8 +1,10 @@
 export class WindowShortcuts {
+	// define keyboard shortcuts
 	static _lastKeydownTime = 0;
 
 	static registerShortcuts() {
 		const shortcuts = [
+			{
 				meta: true,
 				shift: true,
 				key: "'",

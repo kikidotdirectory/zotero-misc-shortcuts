@@ -80,6 +80,13 @@ export class WindowShortcuts {
 		}
 	}
 
+	static focusReader() {
+		const container = WindowShortcuts.getReaderContainer();
+		if (!container) return;
+		const viewer = container.querySelector("iframe") as HTMLElement;
+		viewer?.focus();
+	}
+
 	// behavior
 	static toggleContextPane() {
 		const win = ztoolkit.getGlobal("Zotero_Tabs");

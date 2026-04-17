@@ -65,7 +65,9 @@ export class WindowShortcuts {
 				const firstAnnotation = WindowShortcuts.getReaderContainer().querySelector(".annotation");
 				if (!firstAnnotation) return null;
 				firstAnnotation.focus();
-
+				break;
+			case "outline":
+				// todo i've never needed to use this
 				break;
 		}
 	}

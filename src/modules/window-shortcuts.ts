@@ -48,7 +48,7 @@ export class WindowShortcuts {
 		return WindowShortcuts.currentZoteroTab()._internalReader._state.sidebarView;
 	}
 
-	static getSidebarContainer() {
+	static getReaderContainer() {
 		const innerWindow = WindowShortcuts.currentZoteroTab()._iframe?.contentWindow?.document;
 
 		ztoolkit.log(innerWindow);
@@ -118,4 +118,3 @@ function getReaderInternals() {
 		pdfApp: innerWindow.PDFViewerApplication, // null for EPUB
 	};
 }
-
